@@ -3,17 +3,36 @@ class ListBlock extends React.Component{
     super()
     this.state = {items:[]}
     this.addItem = this.addItem.bind(this);
+    this.removeCard = this.removeCard.bind(this);
   }
   render(){
     return(
       <div>
-      {this.state.items.map(el => <div className='card'> <h2> {el} </h2> </div>)}
+      {this.state.items.map(el => <Card cvalue={el} removeItem={this.removeCard}/>)}
       <InputForm addItem = {this.addItem} />
       </div>
     )
   }
   addItem (val){
     this.setState({items: this.state.items.concat([val])})
+  }
+  removeCard (val){
+    let index = this.state.items.indexOf(val);
+    this.setState(this.state.items.splice(index,1))
+  }
+}
+class Card extends React.Component{
+  constructor(props){
+    super(props);
+    this.removeItem = this.removeItem.bind(this);
+  }
+  render(){
+    return(
+      <div className='card' onClick={this.removeItem}><h2>{this.props.cvalue}</h2></div>
+    )
+  }
+  removeItem(){
+    this.props.removeItem(this.props.cvalue)
   }
 }
 class InputForm extends React.Component{
