@@ -2,31 +2,44 @@ class ListBlock extends React.Component{
   constructor(){
     super()
     this.state = {items:[]}
+    this.addItem = this.addItem.bind(this);
   }
   render(){
     return(
       <div>
-      {this.state.items.map(el => <li> {el} </li>)}
-      <InputForm addItem = {this.addItem.bind(this)} />
+      {this.state.items.map(el => <div className='card'> <h2> {el} </h2> </div>)}
+      <InputForm addItem = {this.addItem} />
       </div>
     )
   }
-  addItem(val){
+  addItem (val){
     this.setState({items: this.state.items.concat([val])})
   }
 }
 class InputForm extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {value:''}
+    this.submitHandler = this.submitHandler.bind(this);
+    this.updateValue = this.updateValue.bind(this);
+  }
   submitHandler(e){
-    e.preventDefault()
-    this.props.addItem(this.body_val.value)
+    //console.log(e.key)
+    if (e.key =='Enter'){
+      if(this.state.value)
+      {
+        this.props.addItem(this.state.value);
+      }
+        this.setState({value:''});
+    }
+  }
+  updateValue(e){
+    this.setState({value: e.target.value});
   }
   render(){
     return(
-      <form onSubmit = {this.submitHandler.bind(this)}>
-      <textarea ref={el=>this.body_val = el}></textarea>
-      <input type="submit" value="Add" />
-      </form>
-    )
+      <input type="text" value={this.state.value} onChange={this.updateValue} onKeyPress={this.submitHandler}/>
+    );
   }
 }
 
